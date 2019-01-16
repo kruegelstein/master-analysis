@@ -1,8 +1,22 @@
 import React, { Component } from 'react';
-import {ResultsContainer, TabContainer, Tab} from './Results.js'
+import {
+  ResultsContainer,
+  TabContainer,
+  Tab,
+  Result,
+  GameContainer,
+  Heading,
+  DimensionContainer,
+  LevelContainer,
+  Name,
+  ScoreContainer
+} from './Results.js'
+
+import { getLevels, getScoreForLevel} from '../../helper/dataHelper'
 
 const categories = ['Overview']
 const games = ['Fruit', 'Breakout', 'Simon']
+const dimensions = ['Linear', 'Half', 'Log']
 
 class Results extends Component {
   render() {
@@ -17,15 +31,30 @@ class Results extends Component {
           >{cat}</Tab>
         )}
         </TabContainer>
-        <TabContainer>
+        <Result>
         {games.map(game =>
-          <Tab
-            key={game}
-            onClick={() => this.props.selectGame(game)}
-            selected={game === this.props.selectedGame}
-          >{game}</Tab>
+          <GameContainer key={game}>
+            <Heading primary>{game}: </Heading>
+            {dimensions.map(dimension =>
+              <DimensionContainer key={dimension}>
+                <Heading>{dimension}: </Heading>
+                {getLevels(this.props.data, game, dimension).map((level, index) =>
+                  <div key={level}>
+                    <LevelContainer >
+                      <Name>{level}: </Name>
+                    </LevelContainer>
+                    <ScoreContainer key={index}>
+                      <Name>Hits: {getScoreForLevel(this.props.data, game, dimension, level).hits}</Name>
+                      <Name>Misses: {getScoreForLevel(this.props.data, game, dimension, level).misses}</Name>
+                      <Name>Speed: {getScoreForLevel(this.props.data, game, dimension, level).speed}</Name>
+                    </ScoreContainer>
+                  </div>
+                )}
+              </DimensionContainer>
+            )}
+          </GameContainer>
         )}
-        </TabContainer>
+        </Result>
       </ResultsContainer>
     );
   }

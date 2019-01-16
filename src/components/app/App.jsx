@@ -5,6 +5,7 @@ import Results from '../results/Results.jsx'
 
 // Helper
 import {getParticipants} from '../../helper/listHelper.js'
+import {getDataForParticipant} from '../../helper/dataHelper.js'
 
 const part1 = require('../../data/P1-P3.json');
 const part2 = require('../../data/P4-P9.json');
@@ -18,9 +19,10 @@ const part8 = require('../../data/P28-P30.json');
 class App extends Component {
   state = {
     data: {},
-    selectedParticipant: 'all',
+    selectedParticipant: 'P1',
     selectedCategory: 'Overview',
-    selectedGame: 'Fruit'
+    selectedGame: 'Fruit',
+    selectedDimension: 'Linear',
   }
 
   componentDidMount() {
@@ -39,7 +41,12 @@ class App extends Component {
     this.setState({selectedGame: game})
   }
 
+  selectDimension(dimension) {
+    this.setState({selectedDimension: dimension})
+  }
+
   render() {
+    const relevantData = getDataForParticipant(this.state.selectedParticipant)
     return (
       <AppContainer>
         <ParticipantsList
@@ -47,12 +54,14 @@ class App extends Component {
           selectParticipant={(participant) => this.selectParticipant(participant)}
           selectedParticipant={this.state.selectedParticipant}/>
         <Results
-          data={this.state.data}
+          data={relevantData}
           selectedParticipant={this.state.selectedParticipant}
           selectedCategory={this.state.selectedCategory}
-          selectedGame={this.state.selectedGame}
           selectCategory={(cat) => this.selectCategory(cat)}
-          selectGame={(game) => this.selectGame(game)}
+          // selectedGame={this.state.selectedGame}
+          // selectGame={(game) => this.selectGame(game)}
+          selectedDimension={this.state.selectedDimension}
+          // selectDimension={(dimension) => this.selectDimension(dimension)}
         />
       </AppContainer>
     );
