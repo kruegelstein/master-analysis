@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 
 const participantsList = styled.div`
-  width: 10rem;
+  margin: 1rem;
+  display: inline-block;
   height: 40rem;
 `;
 

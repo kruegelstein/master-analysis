@@ -7,6 +7,7 @@ const listHeadLine = styled.div`
   border-bottom: 1px solid black;
   position: relative;
   cursor: pointer;
+  background-color: ${props => props.selected ? '#ff6363' : 'inherit'}
 `;
 
 export default listHeadLine;
