@@ -6,6 +6,19 @@ import List from './List.js'
 import ListText from './ListText.js'
 
 class ParticipantsList extends Component {
+  state = {
+    url: ''
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(Object.keys(nextProps.data).length > 0) {
+      var data = nextProps.data;
+      var json = JSON.stringify(data);
+      var blob = new Blob([json], {type: "application/json"});
+      var url  = URL.createObjectURL(blob);
+      this.setState({url})
+    }
+  }
 
   render() {
     return (
@@ -13,6 +26,9 @@ class ParticipantsList extends Component {
         <div>
         <ListHeadLine>
           Participants:
+          <a download='combinedData.json' href={this.state.url}>
+          <button>File</button>
+          </a>
         </ListHeadLine>
         <List>
           <ListItem

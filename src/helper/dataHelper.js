@@ -36,17 +36,20 @@ export const getScoreForLevel = (data, game, dimension, level) => {
         score['hits'] = data[key].results[level.slice(-1)].results.hits
         score['misses'] = data[key].results[level.slice(-1)].results.misses
         score['speed'] = data[key].results[level.slice(-1)].speed
+        score['numOfClicks'] = data[key].results[level.slice(-1)].results.clicks.length
       }
       if(game === 'Simon') {
         score['hits'] = data[key].results[level.slice(-1)].results.correct
         score['misses'] = data[key].results[level.slice(-1)].results.errors
         score['speed'] = data[key].results[level.slice(-1)].speed
+        score['numOfClicks'] = data[key].results[level.slice(-1)].results.clicks.length
       }
       if(game === 'Breakout') {
-        console.log('###', data[key])
         score['hits'] = data[key].results[level.slice(-1)].results.destroyedBricks
         score['misses'] = data[key].results[level.slice(-1)].results.losses
         score['speed'] = data[key].results[level.slice(-1)].speed
+        const clicks = data[key].results[level.slice(-1)].results.clicks
+        score['numOfClicks'] = clicks ? clicks.length : 0
       }
     }
   })

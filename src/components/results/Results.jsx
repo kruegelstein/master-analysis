@@ -19,6 +19,68 @@ const games = ['Fruit', 'Breakout', 'Simon']
 const dimensions = ['Linear', 'Half', 'Log']
 
 class Results extends Component {
+  getRoundSuccess(game, hits, misses, totalClicks) {
+    switch(game) {
+      case 'Fruit':
+        return (hits-misses)/totalClicks
+      case 'Breakout':
+        return (hits-misses)/(hits+misses)
+      case 'Simon':
+        return hits/5
+      default:
+        return 'UNDEFINED'
+    }
+  }
+  calculateSuccessRate(game, dimension) {
+    const elements = document.getElementsByClassName("SUC")
+    let total = 0
+    const flElementIds = Object.keys(elements).filter(index =>
+      elements[index].id.indexOf(game) > -1 && elements[index].id.indexOf(dimension) > -1)
+    const flElementValues = flElementIds.map(index => parseFloat(elements[index].childNodes[1].innerHTML))
+    flElementValues.forEach(value => total += value)
+    total = total/flElementValues.length
+    console.log(total)
+    return total
+  }
+  getTotalSuccess(game, dimension) {
+    switch(game) {
+      case 'Fruit':
+        switch(dimension) {
+          case 'Linear':
+            return this.calculateSuccessRate(game, dimension)
+          case 'Half':
+            return this.calculateSuccessRate(game, dimension)
+          case 'Log':
+            return this.calculateSuccessRate(game, dimension)
+          default:
+            return 'NOT FOUND(DIMENSION)'
+        }
+      case 'Breakout':
+        switch(dimension) {
+          case 'Linear':
+            return this.calculateSuccessRate(game, dimension)
+          case 'Half':
+            return this.calculateSuccessRate(game, dimension)
+          case 'Log':
+            return this.calculateSuccessRate(game, dimension)
+          default:
+            return 'NOT FOUND (DIMENSION)'
+        }
+      case 'Simon':
+        switch(dimension) {
+          case 'Linear':
+            return this.calculateSuccessRate(game, dimension)
+          case 'Half':
+            return this.calculateSuccessRate(game, dimension)
+          case 'Log':
+            return this.calculateSuccessRate(game, dimension)
+          default:
+            return 'NOT FOUND (DIMENSION)'
+        }
+      default:
+        return 'NOT FOUND (GAME)'
+    }
+  }
   render() {
     return (
       <ResultsContainer>
@@ -38,18 +100,27 @@ class Results extends Component {
             {dimensions.map(dimension =>
               <DimensionContainer key={dimension}>
                 <Heading>{dimension}: </Heading>
-                {getLevels(this.props.data, game, dimension).map((level, index) =>
-                  <div key={level}>
+                {getLevels(this.props.data, game, dimension).map((level, index) => {
+                  const hits = getScoreForLevel(this.props.data, game, dimension, level).hits
+                  const misses = getScoreForLevel(this.props.data, game, dimension, level).misses
+                  const totalClicks = getScoreForLevel(this.props.data, game, dimension, level).numOfClicks
+                  const speed = getScoreForLevel(this.props.data, game, dimension, level).speed
+                  return(
+                    <div key={level}>
                     <LevelContainer >
-                      <Name>{level}: </Name>
+                    <Name>{level}: </Name>
                     </LevelContainer>
                     <ScoreContainer key={index}>
-                      <Name>Hits: {getScoreForLevel(this.props.data, game, dimension, level).hits}</Name>
-                      <Name>Misses: {getScoreForLevel(this.props.data, game, dimension, level).misses}</Name>
-                      <Name>Speed: {getScoreForLevel(this.props.data, game, dimension, level).speed}</Name>
+                    <Name>Hits: {hits}</Name>
+                    <Name>Misses: {misses}</Name>
+                    <Name>Total clicks: {totalClicks}</Name>
+                    <Name>Speed: {speed}</Name>
+                    <Name className='SUC' id={`${game+dimension+index}`}>Round success: <span>{this.getRoundSuccess(game, hits, misses, totalClicks)}</span></Name>
                     </ScoreContainer>
-                  </div>
+                    </div>
+                  )}
                 )}
+                <Name>Total Success: {this.getTotalSuccess(game, dimension)}</Name>
               </DimensionContainer>
             )}
           </GameContainer>

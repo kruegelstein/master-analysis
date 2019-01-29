@@ -50,6 +50,7 @@ class App extends Component {
     return (
       <AppContainer>
         <ParticipantsList
+          data={this.state.data}
           participants={getParticipants(this.state.data)}
           selectParticipant={(participant) => this.selectParticipant(participant)}
           selectedParticipant={this.state.selectedParticipant}/>
